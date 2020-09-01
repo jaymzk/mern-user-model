@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://user_model:user_model@cluster0.0muo3.gcp.mongodb.net/user_model?retryWrites=true&w=majority",
+  "jwtSecret": "secret"
+}
