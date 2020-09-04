@@ -143,7 +143,8 @@ router.get("/all", auth, async (req, res) => {
       "-privilege5",
       "-favoriteColor",
     ]);
-    let isAdmin = requestingUser.admin;
+    let isAdmin = !!requestingUser.admin; // turn string into bool
+    console.log(isAdmin);
     if (!isAdmin) {
       return res
         .status(400)
