@@ -144,7 +144,6 @@ router.get("/all", auth, async (req, res) => {
       "-favoriteColor",
     ]);
     let isAdmin = !!requestingUser.admin; // turn string into bool
-    console.log(isAdmin);
     if (!isAdmin) {
       return res
         .status(400)
@@ -213,10 +212,7 @@ router.put("/:id", auth, async (req, res) => {
       "-privilege5",
       "-favoriteColor",
     ]);
-    let isAdmin = requestingUser.admin;
-    console.log(req.user.id);
-    console.log(requestingUser.id);
-    console.log(isAdmin);
+    let isAdmin = !!requestingUser.admin; // turn string into bool
 
     let userToUpdate = await User.findById(req.params.id);
 
@@ -232,13 +228,45 @@ router.put("/:id", auth, async (req, res) => {
     );
     res.json(userToUpdate);
     //
-  } catch (error) {}
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 //private, delete user
 
-router.delete("/:id", (req, res) => {
-  res.send(`delete user ${req.params.id}`);
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    //see if requesting user is an admin
+
+    let requestingUser = await User.findById(req.user.id).select([
+      "-password",
+      "-email",
+      "-firstName",
+      "-lastName",
+      "-date",
+      "-privilege1",
+      "-privilege2",
+      "-privilege3",
+      "-privilege4",
+      "-privilege5",
+      "-favoriteColor",
+    ]);
+    let isAdmin = !!requestingUser.admin; // turn string into bool
+
+    let userToDelete = await User.findById(req.params.id);
+
+    if (!userToDelete) return res.status(404).json({ msg: "User not found" });
+
+    if (userToDelete.id.toString() !== req.user.id && !isAdmin) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+    userToDelete = await User.findByIdAndDelete(req.params.id);
+    res.json(userToDelete);
+    //
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 module.exports = router;
