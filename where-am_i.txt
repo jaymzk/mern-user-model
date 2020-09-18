@@ -1,5 +1,1 @@
-working on update user
-
-works quite well but not so sure about whether is stops users updating other accounts. 
-I don't think it's working right
-but I'll do that tomorrow / later
+starting on context and state
