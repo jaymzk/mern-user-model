@@ -33,6 +33,7 @@ router.post(
       userName,
       email,
       password,
+      phone,
       admin,
       privilege1,
       privilege2,
@@ -62,6 +63,7 @@ router.post(
       userName,
       email,
       password,
+      phone,
       admin,
       privilege1,
       privilege2,
@@ -110,6 +112,7 @@ router.get("/", auth, async (req, res) => {
     const adminUser = await User.findById(req.user.id).select([
       "-password",
       "-email",
+      "-phone",
       "-firstName",
       "-lastName",
       "-date",
@@ -133,6 +136,7 @@ router.get("/all", auth, async (req, res) => {
     let requestingUser = await User.findById(req.user.id).select([
       "-password",
       "-email",
+      "-phone",
       "-firstName",
       "-lastName",
       "-date",
@@ -168,6 +172,7 @@ router.put("/:id", auth, async (req, res) => {
     userName,
     email,
     password,
+    phone,
     admin,
     privilege1,
     privilege2,
@@ -183,6 +188,7 @@ router.put("/:id", auth, async (req, res) => {
   if (lastName) updateFields.lastName = lastName;
   if (userName) updateFields.userName = userName;
   if (email) updateFields.email = email;
+  if (phone) updateFields.phone = phone;
   if (password) {
     const salt = await bcrypt.genSalt(10);
 
@@ -202,6 +208,7 @@ router.put("/:id", auth, async (req, res) => {
     let requestingUser = await User.findById(req.user.id).select([
       "-password",
       "-email",
+      "-phone",
       "-firstName",
       "-lastName",
       "-date",
@@ -242,6 +249,7 @@ router.delete("/:id", auth, async (req, res) => {
     let requestingUser = await User.findById(req.user.id).select([
       "-password",
       "-email",
+      "-phone",
       "-firstName",
       "-lastName",
       "-date",
