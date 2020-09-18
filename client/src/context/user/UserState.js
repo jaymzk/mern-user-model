@@ -16,6 +16,7 @@ const UserState = (props) => {
   const initialState = {
     users: [
       {
+        id: 1,
         firstName: "Doctor",
         lastName: "Something",
         userName: "Dr Something",
@@ -30,6 +31,7 @@ const UserState = (props) => {
         favoriteColor: "#4a69bd",
       },
       {
+        id: 2,
         firstName: "Admin",
         lastName: "Worker",
         userName: "Mrs Admin Worker",
@@ -44,17 +46,18 @@ const UserState = (props) => {
         favoriteColor: "#4a69bd",
       },
       {
+        id: 3,
         firstName: "Anne",
         lastName: "Therapist",
         userName: "Anne Therapist",
-        email: "A Therapist@threecountieshealth.com",
+        email: "ATherapist@threecountieshealth.com",
         password: "AnneTherapist1",
         admin: false,
-        privilege1: true,
-        privilege2: true,
+        privilege1: false,
+        privilege2: false,
         privilege3: true,
         privilege4: true,
-        privilege5: true,
+        privilege5: false,
         favoriteColor: "#4a69bd",
       },
     ],
