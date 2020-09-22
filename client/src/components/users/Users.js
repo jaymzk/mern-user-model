@@ -5,13 +5,17 @@ import UserContext from "../../context/user/userContext";
 const Users = () => {
   const userContext = useContext(UserContext);
 
-  const { users } = userContext;
+  const { users, filtered } = userContext;
+
+  if (users.length === 0) {
+    return <h4>Please Add a User</h4>;
+  }
 
   return (
     <Fragment>
-      {users.map((user) => (
-        <UserItem key={user.id} user={user} />
-      ))}
+      {filtered !== null
+        ? filtered.map((user) => <UserItem key={user.id} user={user} />)
+        : users.map((user) => <UserItem key={user.id} user={user} />)}
     </Fragment>
   );
 };

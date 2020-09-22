@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import PropTypes from "prop-types";
+import UserContext from "../../context/user/userContext";
 
-const Useritem = ({ user }) => {
+const UserItem = ({ user }) => {
+  const userContext = useContext(UserContext);
+
+  const { deleteUser, setCurrent, clearCurrent } = userContext;
+
   const {
     id,
     firstName,
@@ -8,6 +14,7 @@ const Useritem = ({ user }) => {
     userName,
     email,
     password,
+    phone,
     admin,
     privilege1,
     privilege2,
@@ -16,6 +23,11 @@ const Useritem = ({ user }) => {
     privilege5,
     favoriteColor,
   } = user;
+
+  const onDelete = () => {
+    deleteUser(id);
+    clearCurrent();
+  };
 
   return (
     <div className='card bg-light'>
@@ -26,8 +38,35 @@ const Useritem = ({ user }) => {
           {userName}
         </span>
       </h3>
+      <ul className='list'>
+        {email && (
+          <li>
+            <i className='fas fa-envelope-open'> {email}</i>
+          </li>
+        )}
+        {phone && (
+          <li>
+            <i className='fas fa-phone'> {phone}</i>
+          </li>
+        )}
+      </ul>
+      <p>
+        <button
+          className='btn btn-dark btn-sm'
+          onClick={() => setCurrent(user)}
+        >
+          Edit
+        </button>
+        <button className='btn btn-danger btn-sm' onClick={onDelete}>
+          Delete
+        </button>
+      </p>
     </div>
   );
 };
 
-export default Useritem;
+UserItem.propTypes = {
+  user: PropTypes.object.isRequired,
+};
+
+export default UserItem;
