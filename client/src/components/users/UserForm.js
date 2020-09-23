@@ -62,8 +62,7 @@ const UserForm = () => {
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
   const onCheckboxChange = (e) => {
-    let valToBool = !!e.target.value;
-    setUser({ ...user, [e.target.name]: valToBool });
+    setUser({ ...user, [e.target.name]: !user[e.target.name] });
   };
 
   const onSubmit = (e) => {
