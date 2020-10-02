@@ -8,7 +8,7 @@ const UserItem = ({ user }) => {
   const { deleteUser, setCurrent, clearCurrent } = userContext;
 
   const {
-    id,
+    _id,
     firstName,
     lastName,
     userName,
@@ -25,7 +25,7 @@ const UserItem = ({ user }) => {
   } = user;
 
   const onDelete = () => {
-    deleteUser(id);
+    deleteUser(_id);
     clearCurrent();
   };
 

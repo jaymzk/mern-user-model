@@ -1,86 +1,97 @@
 import React, { useReducer } from "react";
-import uuid from "react-uuid";
+import axios from "axios";
 import UserContext from "./userContext";
-import userReducer from "./userReducer";
+import UserReducer from "./userReducer";
 import {
+  GET_USERS,
   ADD_USER,
   DELETE_USER,
   SET_CURRENT,
   CLEAR_CURRENT,
+  CLEAR_USERS,
   DELETE_CURRENT,
   UPDATE_USER,
+  USER_ERROR,
   FILTER_USERS,
   CLEAR_FILTER,
 } from "../types";
 
 const UserState = (props) => {
   const initialState = {
-    users: [
-      {
-        id: 1,
-        firstName: "Doctor",
-        lastName: "Something",
-        userName: "Dr Something",
-        email: "DSomething@threecountieshealth.com",
-        password: "DSomething1",
-        phone: "01432-555-5555",
-        admin: true,
-        privilege1: true,
-        privilege2: true,
-        privilege3: true,
-        privilege4: true,
-        privilege5: false,
-        favoriteColor: "#4a69bd",
-      },
-      {
-        id: 2,
-        firstName: "Admin",
-        lastName: "Worker",
-        userName: "Mrs Admin Worker",
-        email: "AWorker@threecountieshealth.com",
-        password: "AdminWorker1",
-        phone: "01432-555-5555",
-        admin: true,
-        privilege1: true,
-        privilege2: true,
-        privilege3: true,
-        privilege4: true,
-        privilege5: true,
-        favoriteColor: "#4a69bd",
-      },
-      {
-        id: 3,
-        firstName: "Anne",
-        lastName: "Therapist",
-        userName: "Anne Therapist",
-        email: "ATherapist@threecountieshealth.com",
-        password: "AnneTherapist1",
-        phone: "01432-555-5555",
-        admin: false,
-        privilege1: false,
-        privilege2: false,
-        privilege3: true,
-        privilege4: true,
-        privilege5: false,
-        favoriteColor: "#4a69bd",
-      },
-    ],
+    users: null,
     current: null,
     filtered: null,
+    error: null,
   };
 
-  const [state, dispatch] = useReducer(userReducer, initialState);
+  const [state, dispatch] = useReducer(UserReducer, initialState);
+
+  //get users
+
+  const getUsers = async () => {
+    try {
+      const res = await axios.get("/api/users/all");
+
+      dispatch({ type: GET_USERS, payload: res.data });
+    } catch (error) {
+      dispatch({ type: USER_ERROR, payload: error.response.msg });
+    }
+  };
 
   //add user
 
-  const addUser = (user) => {
-    user.id = uuid();
-    dispatch({ type: ADD_USER, payload: user });
+  const addUser = async (user) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const res = await axios.post("/api/users", user, config);
+
+      dispatch({ type: ADD_USER, payload: res.data });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: USER_ERROR, payload: error.response.msg });
+    }
   };
 
   //delete user
-  const deleteUser = (id) => {
-    dispatch({ type: DELETE_USER, payload: id });
+  const deleteUser = async (id) => {
+    try {
+      await axios.delete(`api/users/${id}`);
+
+      dispatch({ type: DELETE_USER, payload: id });
+    } catch (error) {
+      dispatch({
+        type: USER_ERROR,
+        payload: error.response.msg,
+      });
+    }
+  };
+
+  //update user
+  const updateUser = async (user) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const res = await axios.put(`/api/users/${user._id}`, user, config);
+
+      dispatch({ type: UPDATE_USER, payload: res.data });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: USER_ERROR, payload: error.response.msg });
+    }
+  };
+
+  //clear users. avoids info flashing onto screen after a logout
+  const clearUsers = () => {
+    dispatch({ type: CLEAR_USERS });
   };
 
   //set current user
@@ -91,10 +102,6 @@ const UserState = (props) => {
   //clear current user
   const clearCurrent = () => {
     dispatch({ type: CLEAR_CURRENT });
-  };
-  //update user
-  const updateUser = (user) => {
-    dispatch({ type: UPDATE_USER, payload: user });
   };
 
   //filter user
@@ -112,6 +119,8 @@ const UserState = (props) => {
         users: state.users,
         current: state.current,
         filtered: state.filtered,
+        error: state.error,
+        getUsers,
         addUser,
         updateUser,
         deleteUser,
@@ -119,6 +128,7 @@ const UserState = (props) => {
         clearCurrent,
         filterUsers,
         clearFilter,
+        clearUsers,
       }}
     >
       {props.children}

@@ -185,7 +185,7 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label for='admin'>Admin ?</label>
+        <label htmlFor='admin'>Admin ?</label>
       </h5>
       <input
         type='checkbox'
@@ -195,7 +195,7 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label for='privilege1'>Privilege 1 ?</label>
+        <label htmlFor='privilege1'>Privilege 1 ?</label>
       </h5>
       <input
         type='checkbox'
@@ -205,7 +205,7 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label for='privilege2'>Privilege 2 ?</label>
+        <label htmlFor='privilege2'>Privilege 2 ?</label>
       </h5>
       <input
         type='checkbox'
@@ -215,7 +215,7 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label for='privilege3'>Privilege 3 ?</label>
+        <label htmlFor='privilege3'>Privilege 3 ?</label>
       </h5>
       <input
         type='checkbox'
@@ -225,7 +225,7 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label for='privilege4'>Privilege 4 ?</label>
+        <label htmlFor='privilege4'>Privilege 4 ?</label>
       </h5>
 
       <input
@@ -236,7 +236,7 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label for='privilege5'>Privilege 5 ?</label>
+        <label htmlFor='privilege5'>Privilege 5 ?</label>
       </h5>
       <div>
         <input
