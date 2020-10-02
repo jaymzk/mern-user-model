@@ -2,11 +2,10 @@ import {
   ADD_USER,
   DELETE_USER,
   SET_CURRENT,
-  DELETE_CURRENT,
+  CLEAR_CURRENT,
   UPDATE_USER,
   FILTER_USERS,
   CLEAR_FILTER,
-  CLEAR_CURRENT,
 } from "../types";
 
 export default (state, action) => {

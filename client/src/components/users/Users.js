@@ -1,4 +1,5 @@
 import React, { Fragment, useContext } from "react";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import UserItem from "./UserItem";
 import UserContext from "../../context/user/userContext";
 
@@ -13,9 +14,19 @@ const Users = () => {
 
   return (
     <Fragment>
-      {filtered !== null
-        ? filtered.map((user) => <UserItem key={user.id} user={user} />)
-        : users.map((user) => <UserItem key={user.id} user={user} />)}
+      <TransitionGroup>
+        {filtered !== null
+          ? filtered.map((user) => (
+              <CSSTransition key={user.id} timeout={500} classNames='item'>
+                <UserItem user={user} />
+              </CSSTransition>
+            ))
+          : users.map((user) => (
+              <CSSTransition key={user.id} timeout={500} classNames='item'>
+                <UserItem user={user} />
+              </CSSTransition>
+            ))}
+      </TransitionGroup>
     </Fragment>
   );
 };

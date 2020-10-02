@@ -1,6 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import UserContext from "../../context/user/userContext";
+import AlertContext from "../../context/alert/alertContext";
+
 const UserForm = () => {
+  const alertContext = useContext(AlertContext);
+
+  const { setAlert } = alertContext;
+
   const userContext = useContext(UserContext);
 
   const { addUser, updateUser, clearCurrent, current } = userContext;
@@ -15,6 +21,7 @@ const UserForm = () => {
         userName: "",
         email: "",
         password: "",
+        password2: "",
         phone: "",
         admin: false,
         privilege1: false,
@@ -33,6 +40,7 @@ const UserForm = () => {
     userName: "",
     email: "",
     password: "",
+    password2: "",
     phone: "",
     admin: false,
     privilege1: false,
@@ -49,6 +57,7 @@ const UserForm = () => {
     userName,
     email,
     password,
+    password2,
     phone,
     admin,
     privilege1,
@@ -67,8 +76,21 @@ const UserForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     if (current === null) {
-      addUser(user);
+      if (
+        firstName === "" ||
+        lastName === "" ||
+        userName === "" ||
+        email === "" ||
+        password === ""
+      ) {
+        setAlert("Please enter all fields", "danger");
+      } else if (password !== password2) {
+        setAlert("Passwords do not match", "danger");
+      } else {
+        addUser(user);
+      }
     } else {
       updateUser(user);
     }
@@ -145,6 +167,13 @@ const UserForm = () => {
         placeholder='Password'
         name='password'
         value={password}
+        onChange={onChange}
+      />
+      <input
+        type='text'
+        placeholder='Repeat Password'
+        name='password2'
+        value={password2}
         onChange={onChange}
       />
 

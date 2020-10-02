@@ -48,7 +48,7 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        res.status(400).json({ errors: [{ msg: "User already exists" }] });
+        res.status(400).json({ msg: "User already exists" });
       }
       //encrypt the password
       //return jsonwebtoken
@@ -108,7 +108,7 @@ router.get("/", auth, async (req, res) => {
       "-privilege4",
       "-privilege5",
       "-favoriteColor",
-    ]);*/
+    ]);
     const adminUser = await User.findById(req.user.id).select([
       "-password",
       "-email",
@@ -124,6 +124,9 @@ router.get("/", auth, async (req, res) => {
       "-favoriteColor",
     ]);
     res.json(adminUser);
+    */
+    const user = await User.findById(req.user.id).select(["-password"]);
+    res.json(user);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

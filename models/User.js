@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
   },
   userName: {
     type: String,
+    required: true,
   },
   email: {
     type: String,
@@ -26,32 +27,26 @@ const UserSchema = new mongoose.Schema({
   },
   admin: {
     type: Boolean,
-    required: true,
     default: false,
   },
   privilege1: {
     type: Boolean,
-    required: true,
     default: false,
   },
   privilege2: {
     type: Boolean,
-    required: true,
     default: false,
   },
   privilege3: {
     type: Boolean,
-    required: true,
     default: false,
   },
   privilege4: {
     type: Boolean,
-    required: true,
     default: false,
   },
   privilege5: {
     type: Boolean,
-    required: true,
     default: false,
   },
   favoriteColor: {
