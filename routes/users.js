@@ -24,7 +24,7 @@ router.post(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const {
@@ -48,7 +48,7 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        res.status(400).json({ msg: "User already exists" });
+        return res.status(400).json({ msg: "User already exists" });
       }
       //encrypt the password
       //return jsonwebtoken
@@ -234,10 +234,16 @@ router.put("/:id", auth, async (req, res) => {
     userToUpdate = await User.findByIdAndUpdate(
       req.params.id,
       { $set: updateFields },
-      { new: true }
+      { $new: true }
     );
-    res.json(userToUpdate);
-    //
+
+    //res.json(userToUpdate);
+
+    let userToSendBack = await User.findById(req.params.id).select([
+      "-password",
+    ]);
+
+    res.json(userToSendBack);
   } catch (error) {
     console.error(error.message);
   }

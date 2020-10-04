@@ -5,9 +5,12 @@ const AppointmentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
   },
-
   date: {
     type: Date,
+    required: true,
+  },
+  room: {
+    type: Number,
     required: true,
   },
   startTime: {
@@ -24,6 +27,10 @@ const AppointmentSchema = new mongoose.Schema({
   available: {
     type: Boolean,
     default: false,
+  },
+  dateStamp: {
+    type: Date,
+    default: Date.now,
   },
 });
 
