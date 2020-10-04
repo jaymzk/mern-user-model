@@ -14,6 +14,7 @@ app.get("/", (req, res) => res.json({ msg: "Welcome to the user model" }));
 
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/appointments", require("./routes/appointments"));
 
 const PORT = process.env.PORT || 5000;
 

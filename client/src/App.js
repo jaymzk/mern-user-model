@@ -25,7 +25,7 @@ const App = () => {
         <AlertState>
           <Router>
             <Fragment>
-              <Navbar />
+              <Navbar title={"Room Booker"} icon={"far fa-calendar-alt"} />
               <div className='container'>
                 <Alerts />
                 <Switch>
