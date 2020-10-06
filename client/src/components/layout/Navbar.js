@@ -22,6 +22,7 @@ const Navbar = ({ title, icon }) => {
       <li>Hello {user && user.firstName} </li>
       <li>
         <i className='far fa-calendar-alt'> </i>
+
         <Link to='/appointments'>Appointments</Link>
       </li>
       <li>
