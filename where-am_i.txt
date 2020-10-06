@@ -1,4 +1,11 @@
-need userform to have the same functionality as register user
+todo
 
-10:18 load user and set token
+tidy up appointments item 
+proper date and time pickers
+
+login error not showing
+
+separate admin / user functionality.
+
+
 

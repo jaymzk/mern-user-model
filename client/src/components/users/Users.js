@@ -24,12 +24,12 @@ const Users = () => {
         <TransitionGroup>
           {filtered !== null
             ? filtered.map((user) => (
-                <CSSTransition key={user.id} timeout={500} classNames='item'>
+                <CSSTransition key={user._id} timeout={500} classNames='item'>
                   <UserItem user={user} />
                 </CSSTransition>
               ))
             : users.map((user) => (
-                <CSSTransition key={user.id} timeout={500} classNames='item'>
+                <CSSTransition key={user._id} timeout={500} classNames='item'>
                   <UserItem user={user} />
                 </CSSTransition>
               ))}
