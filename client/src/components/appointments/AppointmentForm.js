@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
+import DatePicker from "react-datepicker"
 import AppointmentContext from "../../context/appointment/appointmentContext";
 import AlertContext from "../../context/alert/alertContext";
+import 'react-datepicker/dist/react-datepicker.css'
 
 const AppointmentForm = () => {
   const alertContext = useContext(AlertContext);
@@ -12,7 +14,7 @@ const AppointmentForm = () => {
   const {
     addAppointment,
     updateAppointment,
-    clearAppointment,
+    clearCurrentAppointment,
     current,
   } = appointmentContext;
 
@@ -21,10 +23,10 @@ const AppointmentForm = () => {
       setAppointment(current);
     } else {
       setAppointment({
-        date: "",
-        startTime: "",
-        endTime: "",
-        room: "",
+        date: Date.now(),
+        startTime: Date.now(),
+        endTime: Date.now()+1800000,
+        room: 0,
         notes: "",
         available: false,
       });
@@ -35,7 +37,7 @@ const AppointmentForm = () => {
     date: "",
     startTime: "",
     endTime: "",
-    room: "",
+    room: 0,
     notes: "",
     available: false,
   });
@@ -52,21 +54,37 @@ const AppointmentForm = () => {
     });
   };
 
+  const onRoomChange = (e)=> {
+    console.log(e.target.value)
+    setAppointment({...appointment, room: e.target.value})
+    console.log(appointment)
+
+  }
+
+  const onDateSelect = (date) => {
+    setAppointment({ ...appointment, date: date});
+    console.log(appointment.date)
+  };
+
+  const setStartTime = (time)=> {
+    setAppointment({...appointment, startTime:time})
+  }
+  const setEndTime = (time)=> {
+    setAppointment({...appointment, endTime:time})
+  }
+
   const onSubmit = (e) => {
     e.preventDefault();
 
     if (current === null) {
-      if (
-        date === "" ||
-        startTime === "" ||
-        endTime === "" ||
-        room === "" ||
-        notes === ""
-      ) {
-        setAlert("Please enter all fields", "danger");
-      } else {
+      if (date === ""){ setAlert("Please enter a date", "danger");}
+      if (startTime === ""){ setAlert("Please enter a start time", "danger");}
+      if (endTime === ""){ setAlert("Please enter an end time", "danger");}
+      if (room === "") { setAlert("Please enter a room", "danger");}
+      else { 
         addAppointment(appointment);
-      }
+      } 
+    
     } else {
       updateAppointment(appointment);
     }
@@ -74,7 +92,7 @@ const AppointmentForm = () => {
   };
 
   const clearAll = () => {
-    clearAppointment();
+    clearCurrentAppointment();
   };
 
   return (
@@ -82,34 +100,45 @@ const AppointmentForm = () => {
       <h2 className='text-primary'>
         {current ? "Edit Appointment" : "Add Appointment"}
       </h2>
+       
       <input
         type='text'
-        placeholder='Date'
+        placeholder='Reference'
         name='date'
-        value={date}
+        //value={"Reference"}
         onChange={onChange}
       />
-      <input
-        type='text'
-        placeholder='Start Time'
-        name='startTime'
-        value={startTime}
-        onChange={onChange}
-      />
-      <input
-        type='text'
-        placeholder='End Time'
-        name='endTime'
-        value={endTime}
-        onChange={onChange}
-      />
-
+      
+     
+     <DatePicker
+      dateFormat="dd/MM/yyyy"
+      selected={date ? date : Date.now()}
+      onChange={onDateSelect}
+    />
+     <DatePicker
+      selected={startTime ? startTime : Date.now()}
+      onChange={time => setStartTime(time)}
+      showTimeSelect
+      showTimeSelectOnly
+      timeIntervals={5}
+      timeCaption="Time"
+      dateFormat="h:mm aa"
+    />
+      <DatePicker
+      selected={endTime ? endTime : Date.now() + 1800000}
+      onChange={time => setEndTime(time)}
+      showTimeSelect
+      showTimeSelectOnly
+      timeIntervals={5}
+      timeCaption="Time"
+      dateFormat="h:mm aa"
+    />
       <input
         type='number'
         placeholder='Room'
         name='room'
         value={room}
-        onChange={onChange}
+        onChange={onRoomChange}
       />
       <input
         type='text'

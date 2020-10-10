@@ -9,32 +9,25 @@ router.post(
   "/",
   [
     auth,
-    [
-      check("date", "Date is required").not().isEmpty(),
-      check("room", "Room is required").not().isEmpty(),
-      check("startTime", "Date is required").not().isEmpty(),
-      check("endTime", "Date is required").not().isEmpty(),
-
-      /*check("date", "Invalid date format").isDate(),
-      check("startTime", "Invalid time format").isDate(),
-      check("endTime", "Invalid time format").isDate(),*/
+     [
+       check("date", "Date is required").not().isEmpty(),
+       check("room", "Room is required").not().isEmpty(),
+       check("startTime", "Date is required").not().isEmpty(),
+       check("endTime", "Date is required").not().isEmpty(),
     ],
   ],
+  
   async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const { date, room, startTime, endTime, notes, available } = req.body;
 
     try {
-      if (!(Date.parse(startTime) < Date.parse(endTime)))
-        return res
-          .status(400)
-          .json({ msg: "Start time must be before end time" });
-
+    
       const newAppointment = new Appointment({
         date,
         room,
