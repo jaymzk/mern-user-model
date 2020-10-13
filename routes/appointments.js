@@ -10,6 +10,7 @@ router.post(
   [
     auth,
      [
+       check("reference","Reference is required").not().isEmpty(),
        check("date", "Date is required").not().isEmpty(),
        check("room", "Room is required").not().isEmpty(),
        check("startTime", "Date is required").not().isEmpty(),
@@ -24,11 +25,14 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { date, room, startTime, endTime, notes, available } = req.body;
+    const { reference, date, room, startTime, endTime, notes, available } = req.body;
+
+    
 
     try {
     
       const newAppointment = new Appointment({
+        reference,
         date,
         room,
         startTime,
@@ -83,15 +87,44 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-router.get("/:id", (req, res) => {
-  res.send(`get an appointment with id: ${req.params.id}`);
+//get a users appointments on a certain day
+router.get("/date/:date", auth, async (req, res)=> {
+
+  try {
+
+    const paramDate = new Date(req.params.date)
+
+    const reqYear = paramDate.getFullYear()
+    const reqMonths = paramDate.getMonth()
+    const reqDay = paramDate.getDate()
+    const nextDay = paramDate.getDate() + 1
+
+    const queryDate = new Date(reqYear, reqMonths,reqDay, 0,0,0,0)
+    const queryNextDay = new Date(reqYear, reqMonths,nextDay, 0,0,0,0)
+    
+
+    console.log("getting appotintments by date", queryDate, queryNextDay)
+    // const appointments = await Appointment.find({ date: queryDate }).sort({
+    //   startTime: -1,
+    // });
+    const appointments = await Appointment.find({date: { $gte: queryDate, $lte: queryNextDay}}).sort({
+      startTime: -1,
+    });
+    res.json(appointments);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("User Error");
+  }
 });
+
+
 
 router.put("/:id", auth, async (req, res) => {
   const { date, room, startTime, endTime, notes, available } = req.body;
 
   //appointments object
   const appointmentFields = {};
+  if (reference) appointmentFields.reference = reference;
   if (date) appointmentFields.date = date;
   if (room) appointmentFields.room = room;
   if (startTime) appointmentFields.startTime = startTime;

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import AppointmentContext from "../../context/appointment/appointmentContext";
 import AuthContext from "../../context/auth/authContext"
@@ -15,7 +15,8 @@ const AppointmentItem = ({ appointment }) => {
 
   const {user} = authContext
 
-  const { _id, date, startTime, endTime, room, available, notes } = appointment;
+  const { _id, reference, date, startTime, endTime, room, available, notes } = appointment;
+
 
   const onDelete = () => {
     deleteAppointment(_id);
@@ -28,24 +29,23 @@ const AppointmentItem = ({ appointment }) => {
         <span
           className={"badge " + (available ? "badge-success" : "badge-primary")}
         >
-          {user.userName}
+
+          {available ? "Available for booking" : reference ? reference : user.userName}
         </span>
       </h3>
-      <ul className='list'>
-        <li>
+      <div className="appointment_row">
           <i className='far fa-calendar-alt'> { date.toString().slice(8, 10) + "/" + date.toString().slice(5, 7) + "/" + date.toString().slice(0, 4)}</i>
-        </li>
+          <i className='fas fa-door-open'> { room }</i>
+     </div>
+     
+        <div className="appointment_row">
 
-        <li>
           <i className='far fa-clock'> { startTime.toString().slice(11, 13) + ":" + startTime.toString().slice(14, 16)}</i>
-        </li>
-        <li>
-          {//orig icon = 'fas fa-door-open'>
-          }
-          <i className='far fa-clock'> { endTime.toString().slice(11, 13) + ":" + endTime.toString().slice(14, 16)}</i>
-        </li>
-      </ul>
-      <p>
+       
+          <i className="fas fa-hourglass-end"> { endTime.toString().slice(11, 13) + ":" + endTime.toString().slice(14, 16)}</i>
+       
+          </div>
+      <div className="appointment_row">
         <button
           className='btn btn-dark btn-sm'
           onClick={() => setCurrentAppointment(appointment)}
@@ -55,7 +55,7 @@ const AppointmentItem = ({ appointment }) => {
         <button className='btn btn-danger btn-sm' onClick={onDelete}>
           Delete
         </button>
-      </p>
+        </div>
     </div>
   );
 };

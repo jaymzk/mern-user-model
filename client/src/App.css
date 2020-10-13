@@ -441,3 +441,12 @@ table th {
     justify-content: center;
   }
 }
+
+/*appointment card*/
+.appointment_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin: 0.9rem;
+}

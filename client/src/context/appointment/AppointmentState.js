@@ -12,6 +12,7 @@ import {
   FILTER_APPOINTMENTS,
   CLEAR_FILTER_APPOINTMENTS,
   APPOINTMENT_ERROR,
+  FILTER_APPOINTMENTS_BY_DATE,
 } from "../types";
 
 const AppointmentState = (props) => {
@@ -35,6 +36,21 @@ const AppointmentState = (props) => {
       dispatch({ type: APPOINTMENT_ERROR, payload: error.response.msg });
     }
   };
+
+  const getAppointmentsByDate = async (date) => {
+    try {
+      const isoDate = date.toISOString()
+      console.log(isoDate)
+      const res = await axios.get(`/api/appointments/date/${isoDate}`);
+
+      dispatch({ type: GET_APPOINTMENTS, payload: res.data });
+    } catch (error) {
+      console.error(error)
+      dispatch({ type: APPOINTMENT_ERROR, payload: error.response.msg });
+    }
+  };
+
+
 
   //add appointment
   const addAppointment = async (appointment) => {
@@ -72,6 +88,14 @@ const AppointmentState = (props) => {
   //set current appointment
 
   const setCurrentAppointment = (appointment) => {
+    let { date, reference, startTime, endTime} = appointment
+
+    //make sure tines and dates are in the correct format
+    appointment.date = new Date(date)
+    appointment.startTime = new Date(startTime)
+    appointment.endTime = new Date(endTime)
+
+   
     dispatch({ type: SET_CURRENT_APPOINTMENT, payload: appointment });
   };
 
@@ -105,8 +129,24 @@ const AppointmentState = (props) => {
 
   //filter appointments
   const filterAppointments = (text) => {
+    
     dispatch({ type: FILTER_APPOINTMENTS, payload: text });
   };
+
+  const filterByDate = (date) => {
+
+    const year = date.getFullYear()
+
+    const month = date.getMonth()
+
+    const day = date.getDate()
+
+    date = new Date(year, month, day, 1,0,0,0)
+
+    console.log("filtering by date", date)
+
+    dispatch({ type: FILTER_APPOINTMENTS_BY_DATE, payload: date });
+  }
 
   //clear filter
 
@@ -124,11 +164,13 @@ const AppointmentState = (props) => {
         filtered: state.filtered,
         error: state.error,
         getAppointments,
+        getAppointmentsByDate,
         addAppointment,
         deleteAppointment,
         updateAppointment,
         clearCurrentAppointment,
         clearFilterAppointments,
+        filterByDate,
         filterAppointments,
         setCurrentAppointment,
       }}

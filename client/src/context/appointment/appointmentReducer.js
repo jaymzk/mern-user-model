@@ -7,6 +7,7 @@ import {
   CLEAR_APPOINTMENTS,
   UPDATE_APPOINTMENT,
   FILTER_APPOINTMENTS,
+  FILTER_APPOINTMENTS_BY_DATE,
   CLEAR_FILTER_APPOINTMENTS,
   APPOINTMENT_ERROR,
 } from "../types";
@@ -38,7 +39,7 @@ export default (state, action) => {
     case DELETE_APPOINTMENT:
       return {
         ...state,
-        appointments: state.appointmentss.filter(
+        appointments: state.appointments.filter(
           (appointment) => appointment._id !== action.payload
         ),
         loading: false,
@@ -70,14 +71,18 @@ export default (state, action) => {
         filtered: state.appointments.filter((appointment) => {
           const regex = new RegExp(`${action.payload}`, "gi");
           return (
-            appointment.date.match(regex) ||
-            appointment.startTime.match(regex) ||
-            appointment.endTime.match(regex) ||
-            appointment.notes.match(regex)
+            appointment.reference.match(regex)
           );
         }),
         loading: false,
       };
+    case FILTER_APPOINTMENTS_BY_DATE:
+      return {
+        ...state,
+        
+        loading: false,
+      };
+      
     case CLEAR_FILTER_APPOINTMENTS:
       return {
         ...state,

@@ -4,7 +4,7 @@ import AppointmentContext from "../../context/appointment/appointmentContext";
 import AlertContext from "../../context/alert/alertContext";
 import 'react-datepicker/dist/react-datepicker.css'
 
-const AppointmentForm = () => {
+const AppointmentQueryForm = () => {
   const alertContext = useContext(AlertContext);
 
   const { setAlert } = alertContext;
@@ -22,22 +22,18 @@ const AppointmentForm = () => {
     if (current !== null) {
       setAppointment(current);
     } else {
-
-      setAppointment({     
-        reference: "",   
+      setAppointment({
         date: Date.now(),
-        startTime:new Date(0, 0, 0, 7, 0, 0, 0),
-        endTime:new Date(0, 0, 0, 7, 0, 0, 0),
+        startTime: Date.now(),
+        endTime: Date.now()+1800000,
         room: 0,
         notes: "",
         available: false,
-        
       });
     }
   }, [appointmentContext, current]);
 
   const [appointment, setAppointment] = useState({
-    reference:"",
     date: "",
     startTime: "",
     endTime: "",
@@ -46,13 +42,7 @@ const AppointmentForm = () => {
     available: false,
   });
 
-  let { date, reference, startTime, endTime, room, notes, available} = appointment;
-
-  const [startTimeClicked, setStartTimeClicked] = useState(false)
-  const [endTimeClicked, setEndTimeClicked] = useState(false)
-  const [dateClicked, setDateClicked] = useState(false)
-
-
+  const { date, startTime, endTime, room, notes, available } = appointment;
 
   const onChange = (e) =>
     setAppointment({ ...appointment, [e.target.name]: e.target.value });
@@ -68,67 +58,29 @@ const AppointmentForm = () => {
     console.log(e.target.value)
     setAppointment({...appointment, room: e.target.value})
     console.log(appointment)
+
   }
 
   const onDateSelect = (date) => {
-
-    setDateClicked(true)
-
-    const year = date.getFullYear()
-
-    const month = date.getMonth()
-
-    const day = date.getDate()
-
-    date = new Date(year, month, day, 1,0,0,0)
-
     setAppointment({ ...appointment, date: date});
-
+    console.log(appointment.date)
   };
 
   const setStartTime = (time)=> {
-
-    setStartTimeClicked(true)
-
-    const hours = time.getHours()
-
-    const minutes = time.getMinutes()
-
-    time = new Date(0,0,0, hours, minutes, 0,0)
-
     setAppointment({...appointment, startTime:time})
-
-  
   }
   const setEndTime = (time)=> {
-
-    setEndTimeClicked(true)
-
-    const hours = time.getHours()
-
-    const minutes = time.getMinutes()
-
-    time = new Date(0,0,0, hours, minutes, 0,0)
-
-
     setAppointment({...appointment, endTime:time})
   }
-
-  
 
   const onSubmit = (e) => {
     e.preventDefault();
 
     if (current === null) {
-      if (reference === ""){ setAlert("Please enter a reference", "danger");}
       if (date === ""){ setAlert("Please enter a date", "danger");}
       if (startTime === ""){ setAlert("Please enter a start time", "danger");}
       if (endTime === ""){ setAlert("Please enter an end time", "danger");}
       if (room === "") { setAlert("Please enter a room", "danger");}
-      if (!dateClicked) { setAlert("Please choose a date", "danger");}
-      if (!startTimeClicked) { setAlert("Please choose a start time", "danger");}
-      if (!endTimeClicked) { setAlert("Please choose an end time", "danger");}
-
       else { 
         addAppointment(appointment);
       } 
@@ -153,7 +105,7 @@ const AppointmentForm = () => {
         type='text'
         placeholder='Reference'
         name='reference'
-        value={reference}
+        //value={"Reference"}
         onChange={onChange}
       />
        <label htmlFor='reference'>Reference</label>
@@ -243,4 +195,4 @@ const AppointmentForm = () => {
   );
 };
 
-export default AppointmentForm;
+export default AppointmentQueryForm;

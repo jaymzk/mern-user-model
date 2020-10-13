@@ -5,6 +5,10 @@ const AppointmentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
   },
+  reference: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     required: true,
