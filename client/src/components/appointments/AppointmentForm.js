@@ -1,7 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Fragment } from "react";
 import DatePicker from "react-datepicker"
 import AppointmentContext from "../../context/appointment/appointmentContext";
 import AlertContext from "../../context/alert/alertContext";
+import AuthContext from "../../context/auth/authContext";
 import 'react-datepicker/dist/react-datepicker.css'
 
 const AppointmentForm = () => {
@@ -17,6 +18,12 @@ const AppointmentForm = () => {
     clearCurrentAppointment,
     current,
   } = appointmentContext;
+
+  const authContext = useContext(AuthContext)
+
+  const { user } = authContext
+
+  const {userType, calendarPreference, privilege1, privilege2, privilege3, privilege4, privilege5} = user
 
   useEffect(() => {
     if (current !== null) {
@@ -67,7 +74,7 @@ const AppointmentForm = () => {
   const onRoomChange = (e)=> {
     console.log(e.target.value)
     setAppointment({...appointment, room: e.target.value})
-    console.log(appointment)
+    
   }
 
   const onDateSelect = (date) => {
@@ -114,7 +121,6 @@ const AppointmentForm = () => {
     setAppointment({...appointment, endTime:time})
   }
 
-  
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -125,9 +131,9 @@ const AppointmentForm = () => {
       if (startTime === ""){ setAlert("Please enter a start time", "danger");}
       if (endTime === ""){ setAlert("Please enter an end time", "danger");}
       if (room === "") { setAlert("Please enter a room", "danger");}
-      if (!dateClicked) { setAlert("Please choose a date", "danger");}
-      if (!startTimeClicked) { setAlert("Please choose a start time", "danger");}
-      if (!endTimeClicked) { setAlert("Please choose an end time", "danger");}
+      if (dateClicked===false) { setAlert("Please choose a date", "danger");}
+      if (startTimeClicked===false) { setAlert("Please choose a start time", "danger");}
+      if (endTimeClicked===false) { setAlert("Please choose an end time", "danger");}
 
       else { 
         addAppointment(appointment);
@@ -164,6 +170,7 @@ const AppointmentForm = () => {
       selected={date ? date : Date.now()}
       onChange={onDateSelect}
     />
+    
      <br />
       <label htmlFor='date'>Date</label>
     <br />
@@ -190,6 +197,8 @@ const AppointmentForm = () => {
     />
      <br />
       <label htmlFor='endTime'>End Time</label>
+    {/* 
+      old room picker. I'll leave it here until I'm sure the new one works
     <br />
       <input
         type='number'
@@ -197,8 +206,61 @@ const AppointmentForm = () => {
         name='room'
         value={room}
         onChange={onRoomChange}
-      />
-       <br />
+      /> */}
+ <br />
+      <h5>Room</h5>
+
+      { (userType==="admin" || privilege1===true) &&
+        <Fragment>
+        
+      <input type="radio" name="room" value={1} checked={room===1} onChange={onChange}
+
+      /> Room 1{" "}<br/>
+  </Fragment>
+      }
+      
+{ (userType==="admin" || privilege2===true) &&
+        <Fragment>
+        
+  <input type="radio" name="room" value={2} checked={room===2} onChange={onChange}
+
+/> Room 2{" "}<br/>
+</Fragment>}
+
+{ (userType==="admin" || privilege3===true) &&
+        <Fragment>
+        
+
+  <input type="radio" name="room" value={3} onChange={onChange}
+
+  /> Room 3{" "}<br/>
+  </Fragment>
+}
+
+{ (userType==="admin" || privilege4===true) &&
+        <Fragment>
+        
+
+<input type="radio" name="room" value={4} onChange={onChange}
+
+/> Room 4{" "}<br/>
+</Fragment>}
+
+
+{ (userType==="admin" || privilege5===true) &&
+        <Fragment>
+
+<input type="radio" name="room" value={5} checked={room===5} onChange={onChange}
+
+/> Group Room {" "}<br/>
+
+</Fragment> }
+      <br />
+
+
+
+
+     {/*  <br />
         <label htmlFor='room'>Room</label>
         <br />
       <input
@@ -210,7 +272,11 @@ const AppointmentForm = () => {
       />
        <br />
         <label htmlFor='notes'>Notes</label>
+        */}
     <br />
+      {/* 
+      This is for the future, when users are able to indicate bookable appointments which patients can select
+       from teh website. I'm hiding it for time being to avoid confusion
       <input
         type='checkbox'
         name='available'
@@ -221,7 +287,7 @@ const AppointmentForm = () => {
       
       <h5>
         <label htmlFor='admin'>Available for booking?</label>
-      </h5>
+      </h5> */}
       <br />
 
       <div>

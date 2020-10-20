@@ -11,6 +11,7 @@ const AppointmentFilter = () => {
   const {
     filterAppointments,
     filterByDate,
+    getAppointments,
     getAppointmentsByDate,
     clearFilterAppointments,
     filtered,
@@ -51,6 +52,12 @@ const onDateFilterChange =(date)=> {
       selected={date}
       onChange={onDateFilterChange}
     />
+     <button
+          className='clear-filter-button btn btn-dark btn-sm'
+          onClick={getAppointments}
+        >
+          Clear Filter
+        </button>
 
     </form>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect,Fragment } from "react";
 import UserContext from "../../context/user/userContext";
 import AlertContext from "../../context/alert/alertContext";
 
@@ -23,6 +23,8 @@ const UserForm = () => {
         password: "",
         password2: "",
         phone: "",
+        userType:"patient",
+        calendarPreference: "week",
         admin: false,
         privilege1: false,
         privilege2: false,
@@ -42,6 +44,8 @@ const UserForm = () => {
     password: "",
     password2: "",
     phone: "",
+    userType:"patient",
+    calendarPreference:"week",
     admin: false,
     privilege1: false,
     privilege2: false,
@@ -59,6 +63,8 @@ const UserForm = () => {
     password,
     password2,
     phone,
+    userType,
+    calendarPreference,
     admin,
     privilege1,
     privilege2,
@@ -72,7 +78,14 @@ const UserForm = () => {
 
   const onCheckboxChange = (e) => {
     setUser({ ...user, [e.target.name]: !user[e.target.name] });
+    
   };
+
+  const onAdminCheckboxChange = (e) => {
+    setUser({ ...user, admin: !user.admin });
+   /*this is a separate function so i can experiment with ways to 
+   cancel all priviliges automatically if admin is changed to false. useeffect best though?
+  */};
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -97,28 +110,6 @@ const UserForm = () => {
     clearAll();
   };
 
-  /*
-  const onSubmit = (e) => {
-    e.preventDefault();
-    userContext.addUser(user);
-    setUser({
-      firstName: "",
-      lastName: "",
-      userName: "",
-      email: "",
-      password: "",
-      phone: "",
-      admin: false,
-      privilege1: false,
-      privilege2: false,
-      privilege3: false,
-      privilege4: false,
-      privilege5: false,
-      favoriteColor: "#4a69bd",
-    });
-    
-  };
-*/
   const clearAll = () => {
     clearCurrent();
   };
@@ -163,30 +154,70 @@ const UserForm = () => {
       />
 
       <input
-        type='text'
+        type='password'
         placeholder='Password'
         name='password'
         value={password}
         onChange={onChange}
       />
       <input
-        type='text'
+        type='password'
         placeholder='Repeat Password'
         name='password2'
         value={password2}
         onChange={onChange}
       />
+      <h5>User Type</h5>
+      <input type="radio" name="userType" value="patient" checked={userType==="patient"} onChange={onChange}
 
+      /> Patient{" "}
+      <input type="radio" name="userType" value="user" checked={userType==="user"} onChange={onChange}
+
+      /> User{" "}
+      <input type="radio" name="userType" value="admin" checked={userType==="admin"} onChange={onChange}
+
+      /> Admin{" "}
+
+      <br />
+      <h5>Calendar Preference</h5>
+      <input type="radio" name="calendarPreference" value="day" checked={calendarPreference==="day"} onChange={onChange}
+
+      /> Day{" "}
+      <input type="radio" name="calendarPreference" value="week" checked={calendarPreference==="week"} onChange={onChange}
+
+      /> Week{" "}
+      <input type="radio" name="calendarPreference" value="month" checked={calendarPreference==="month"} onChange={onChange}
+
+      /> Month{" "}
+
+      <br />
+      <label htmlFor="favoriteColor">Select your favorite color:</label>
+      <input type="color" name="favoriteColor" value={favoriteColor} onChange={onChange}></input>
+{/*
+I want to make the checkboxes individual fragments to give me flexibility for 
+future changes or client requests
+*/}
+
+{user.userType==="user" && 
+<Fragment>  
       <input
         type='checkbox'
         name='admin'
         value={admin}
         checked={admin}
-        onChange={onCheckboxChange}
+        onChange={onAdminCheckboxChange}
       />
+
+
       <h5>
         <label htmlFor='admin'>Admin ?</label>
       </h5>
+  </Fragment>  
+
+    }
+    {user.userType==="user" && 
+<Fragment>  
+    
       <input
         type='checkbox'
         name='privilege1'
@@ -195,8 +226,14 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label htmlFor='privilege1'>Privilege 1 ?</label>
+        <label htmlFor='privilege1'>Room 1 ?</label>
       </h5>
+
+      </Fragment>  
+
+    }
+    {user.userType==="user" && 
+<Fragment>  
       <input
         type='checkbox'
         name='privilege2'
@@ -205,8 +242,13 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label htmlFor='privilege2'>Privilege 2 ?</label>
+        <label htmlFor='privilege2'>Room 2 ?</label>
       </h5>
+      </Fragment>  
+
+}
+{user.userType==="user" && 
+<Fragment> 
       <input
         type='checkbox'
         name='privilege3'
@@ -215,8 +257,13 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label htmlFor='privilege3'>Privilege 3 ?</label>
+        <label htmlFor='privilege3'>Room 3 ?</label>
       </h5>
+      </Fragment>  
+
+}
+{user.userType==="user" && 
+<Fragment> 
       <input
         type='checkbox'
         name='privilege4'
@@ -225,8 +272,13 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label htmlFor='privilege4'>Privilege 4 ?</label>
+        <label htmlFor='privilege4'>Room 4 ?</label>
       </h5>
+      </Fragment>  
+
+}
+{user.userType==="user" && 
+<Fragment> 
 
       <input
         type='checkbox'
@@ -236,8 +288,11 @@ const UserForm = () => {
         onChange={onCheckboxChange}
       />
       <h5>
-        <label htmlFor='privilege5'>Privilege 5 ?</label>
+        <label htmlFor='privilege5'>Group Room ?</label>
       </h5>
+      </Fragment>  
+
+}
       <div>
         <input
           type='submit'

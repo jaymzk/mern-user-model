@@ -1,12 +1,6 @@
 todo
 
-tidy up appointments item 
-proper date and time pickers
+wierd persistent state thing happening in user.
 
-login error not showing
-
-separate admin / user functionality.
-
-
-currently on a new git branch setting up the ui for appointment booking
+date checkboxes remaining checked in appointment
 

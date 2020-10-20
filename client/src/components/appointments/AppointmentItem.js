@@ -17,6 +17,27 @@ const AppointmentItem = ({ appointment }) => {
 
   const { _id, reference, date, startTime, endTime, room, available, notes } = appointment;
 
+  //sanitize the dates and times becuase the format changes according to where the date is coming from. 
+
+  const [displayDate, setdisplayDate] = useState(new Date(date))
+  const [displayStartTime, setdisplayStartTime] = useState(new Date(startTime))
+
+  let [startTimeMinutes, setStartTimeMintes] = useState(displayStartTime.getMinutes().toString())
+
+  if(startTimeMinutes.length===1) {
+    setStartTimeMintes("0" + startTimeMinutes)
+  }
+  
+const [displayEndTime, setdisplayEndTime] = useState(new Date(endTime))
+
+let [endTimeMinutes, setEndTimeMintes] = useState(displayEndTime.getMinutes().toString())
+//repetitious but works whereas writing a function doesnt seem to...?
+
+
+if(endTimeMinutes.length===1) {
+  setEndTimeMintes("0" + endTimeMinutes)
+}
+
 
   const onDelete = () => {
     deleteAppointment(_id);
@@ -34,24 +55,28 @@ const AppointmentItem = ({ appointment }) => {
         </span>
       </h3>
       <div className="appointment_row">
-          <i className='far fa-calendar-alt'> { date.toString().slice(8, 10) + "/" + date.toString().slice(5, 7) + "/" + date.toString().slice(0, 4)}</i>
+
+        <i className='far fa-calendar-alt'> { displayDate.getDate() + "/" + (parseInt(displayDate.getMonth()) + 1) + "/" + displayDate.getFullYear() }</i><br />
+
           <i className='fas fa-door-open'> { room }</i>
      </div>
      
         <div className="appointment_row">
 
-          <i className='far fa-clock'> { startTime.toString().slice(11, 13) + ":" + startTime.toString().slice(14, 16)}</i>
+          <i className='far fa-clock'> { displayStartTime.getHours() + ":" + startTimeMinutes}</i>
        
-          <i className="fas fa-hourglass-end"> { endTime.toString().slice(11, 13) + ":" + endTime.toString().slice(14, 16)}</i>
+          <i className="fas fa-hourglass-end"> { displayEndTime.getHours() + ":" + endTimeMinutes}</i>
        
           </div>
       <div className="appointment_row">
-        <button
+       {/* 
+       wierd stuff happens when you try to edit an appointment. I'll fix this later
+       <button
           className='btn btn-dark btn-sm'
           onClick={() => setCurrentAppointment(appointment)}
         >
           Edit
-        </button>
+        </button> */}
         <button className='btn btn-danger btn-sm' onClick={onDelete}>
           Delete
         </button>

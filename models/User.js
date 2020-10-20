@@ -25,6 +25,14 @@ const UserSchema = new mongoose.Schema({
   phone: {
     type: String,
   },
+  userType: {
+    type: String,
+    default: "patient"
+  },
+  calendarPreference: {
+    type: String,
+    default: "week"
+  },
   admin: {
     type: Boolean,
     default: false,

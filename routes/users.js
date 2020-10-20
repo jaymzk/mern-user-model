@@ -34,6 +34,8 @@ router.post(
       email,
       password,
       phone,
+      userType,
+      calendarPreference,
       admin,
       privilege1,
       privilege2,
@@ -64,6 +66,8 @@ router.post(
       email,
       password,
       phone,
+      userType,
+      calendarPreference,
       admin,
       privilege1,
       privilege2,
@@ -100,42 +104,20 @@ router.post(
 //get logged in user
 router.get("/", auth, async (req, res) => {
   try {
-    /*const user = await User.findById(req.user.id).select([
-      "-password",
-      "-privilege1",
-      "-privilege2",
-      "-privilege3",
-      "-privilege4",
-      "-privilege5",
-      "-favoriteColor",
-    ]);
-    const adminUser = await User.findById(req.user.id).select([
-      "-password",
-      "-email",
-      "-phone",
-      "-firstName",
-      "-lastName",
-      "-date",
-      "-privilege1",
-      "-privilege2",
-      "-privilege3",
-      "-privilege4",
-      "-privilege5",
-      "-favoriteColor",
-    ]);
-    res.json(adminUser);
-    */
-    const user = await User.findById(req.user.id).select(["-password"]);
+   
+ const user = await User.findById(req.user.id).select(["-password"]);
     res.json(user);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
   }
 });
+
 //private , allow admins to get all users if it's that sort of app,
 
 router.get("/all", auth, async (req, res) => {
   try {
+
     let requestingUser = await User.findById(req.user.id).select([
       "-password",
       "-email",
@@ -143,6 +125,7 @@ router.get("/all", auth, async (req, res) => {
       "-firstName",
       "-lastName",
       "-date",
+      "-calendarPreference",
       "-privilege1",
       "-privilege2",
       "-privilege3",
@@ -150,7 +133,9 @@ router.get("/all", auth, async (req, res) => {
       "-privilege5",
       "-favoriteColor",
     ]);
-    let isAdmin = !!requestingUser.admin; // turn string into bool
+    //let isAdmin = !!requestingUser.admin; // turn string into bool
+    let isAdmin = requestingUser.userType==="admin"
+
     if (!isAdmin) {
       return res
         .status(400)
@@ -176,6 +161,8 @@ router.put("/:id", auth, async (req, res) => {
     email,
     password,
     phone,
+    userType,
+    calendarPreference,
     admin,
     privilege1,
     privilege2,
@@ -184,6 +171,8 @@ router.put("/:id", auth, async (req, res) => {
     privilege5,
     favoriteColor,
   } = req.body;
+
+  
 
   //build a user object based on the fields submitted
   const updateFields = {};
@@ -197,17 +186,20 @@ router.put("/:id", auth, async (req, res) => {
 
     updateFields.password = await bcrypt.hash(password, salt);
   }
-  if (admin) updateFields.admin = admin;
-  if (privilege1) updateFields.privilege1 = privilege1;
-  if (privilege2) updateFields.privilege2 = privilege2;
-  if (privilege3) updateFields.privilege3 = privilege3;
-  if (privilege4) updateFields.privilege4 = privilege4;
-  if (privilege5) updateFields.privilege5 = privilege5;
+  //there is always a userType and calendar preference
+  updateFields.userType=userType
+  updateFields.calendarPreference=calendarPreference
+  //always send the bools cos otherwise a false evaluates in such a way as to not change the value
+  updateFields.admin = admin;
+  updateFields.privilege1 = privilege1;
+  updateFields.privilege2 = privilege2;
+  updateFields.privilege3 = privilege3;
+  updateFields.privilege4 = privilege4;
+  updateFields.privilege5 = privilege5;
   if (favoriteColor) updateFields.favoriteColor = favoriteColor;
 
   try {
-    //see if requesting user is an admin
-
+    //see if the requesting user is an admin. This seems a bit hacky but it works for now
     let requestingUser = await User.findById(req.user.id).select([
       "-password",
       "-email",
@@ -223,7 +215,13 @@ router.put("/:id", auth, async (req, res) => {
       "-favoriteColor",
     ]);
     let isAdmin = !!requestingUser.admin; // turn string into bool
+    if (!isAdmin) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "User does not have admin privileges" }] });
+    }
 
+    
     let userToUpdate = await User.findById(req.params.id);
 
     if (!userToUpdate) return res.status(404).json({ msg: "User not found" });
@@ -236,9 +234,7 @@ router.put("/:id", auth, async (req, res) => {
       { $set: updateFields },
       { $new: true }
     );
-
-    //res.json(userToUpdate);
-
+//theres probably a way to do this without a second call to the database but this'll do for now     
     let userToSendBack = await User.findById(req.params.id).select([
       "-password",
     ]);

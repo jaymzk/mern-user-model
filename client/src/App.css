@@ -322,6 +322,9 @@ input[type="submit"],
 button {
   font: inherit;
 }
+.clear-filter-button {
+  margin-left: 2rem;
+}
 
 .form-group {
   margin: 1.2rem 0;
@@ -383,6 +386,10 @@ table th {
 
 .navbar .welcome span {
   margin-right: 0.6rem;
+}
+
+.hello-user {
+  margin-right: 1rem;
 }
 
 /* Animation (Add After) */

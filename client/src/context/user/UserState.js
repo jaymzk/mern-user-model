@@ -49,7 +49,9 @@ const UserState = (props) => {
     try {
       const res = await axios.post("/api/users", user, config);
 
-      dispatch({ type: ADD_USER, payload: res.data });
+     // dispatch({ type: ADD_USER, payload: res.data });
+     //below is my attempt to fix the new user not showing up when created. It works but we'll see if it causes any problems later
+     dispatch({type: ADD_USER, payload: user})
     } catch (error) {
       console.error(error);
       dispatch({ type: USER_ERROR, payload: error.response.msg });

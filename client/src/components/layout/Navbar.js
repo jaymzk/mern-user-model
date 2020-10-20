@@ -19,7 +19,7 @@ const Navbar = ({ title, icon }) => {
 
   const authLinks = (
     <Fragment>
-      <li>Hello {user && user.firstName} </li>
+      <li className="hello-user">Hello {user && user.firstName} </li>
       <li>
         <i className='far fa-calendar-alt'> </i>
 
@@ -41,7 +41,7 @@ const Navbar = ({ title, icon }) => {
 
   const guestLinks = (
     <Fragment>
-      <Link to='/register'>Register</Link>
+      {/*<Link to='/register'>Register</Link>*/}
       <Link to='/login'>Login</Link>
     </Fragment>
   );
@@ -62,7 +62,7 @@ Navbar.propTypes = {
 };
 
 Navbar.defaultProps = {
-  title: "User Model",
+  title: "Appointment Keeper",
   icon: "fas fa-id-card-alt",
 };
 
