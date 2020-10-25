@@ -12,7 +12,9 @@ const UserForm = () => {
   const { addUser, updateUser, clearCurrent, current } = userContext;
 
   useEffect(() => {
+   
     if (current !== null) {
+      console.log(current)
       setUser(current);
     } else {
       setUser({
@@ -74,6 +76,7 @@ const UserForm = () => {
     favoriteColor,
   } = user;
 
+  
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
   const onCheckboxChange = (e) => {
@@ -115,7 +118,7 @@ const UserForm = () => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} autocomplete="off">
       <h2 className='text-primary'>{current ? "Edit User" : "Add User"}</h2>
       <input
         type='text'
@@ -142,14 +145,14 @@ const UserForm = () => {
         type='email'
         placeholder='email'
         name='email'
-        value={email}
+        value={email===undefined ? "" : email}
         onChange={onChange}
       />
       <input
         type='tel'
         placeholder='Phone Number'
         name='phone'
-        value={phone}
+        value={phone===undefined ? "" : phone }
         onChange={onChange}
       />
 
@@ -157,14 +160,15 @@ const UserForm = () => {
         type='password'
         placeholder='Password'
         name='password'
-        value={password}
+        value={password===undefined ? "" : password}
         onChange={onChange}
       />
+      
       <input
         type='password'
         placeholder='Repeat Password'
         name='password2'
-        value={password2}
+        value={password2===undefined ? "" : password2}
         onChange={onChange}
       />
       <h5>User Type</h5>

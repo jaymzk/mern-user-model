@@ -40,7 +40,7 @@ const AppointmentState = (props) => {
   const getAppointmentsByDate = async (date) => {
     try {
       const isoDate = date.toISOString()
-      console.log(isoDate)
+      console.log("Getting appointments for :", isoDate)
       const res = await axios.get(`/api/appointments/date/${isoDate}`);
 
       dispatch({ type: GET_APPOINTMENTS, payload: res.data });
@@ -88,14 +88,13 @@ const AppointmentState = (props) => {
   //set current appointment
 
   const setCurrentAppointment = (appointment) => {
-    let { date, reference, startTime, endTime} = appointment
+    let { date, startTime, endTime} = appointment
 
     //make sure tines and dates are in the correct format
     appointment.date = new Date(date)
     appointment.startTime = new Date(startTime)
     appointment.endTime = new Date(endTime)
 
-   
     dispatch({ type: SET_CURRENT_APPOINTMENT, payload: appointment });
   };
 

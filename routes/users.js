@@ -197,6 +197,7 @@ router.put("/:id", auth, async (req, res) => {
   updateFields.privilege4 = privilege4;
   updateFields.privilege5 = privilege5;
   if (favoriteColor) updateFields.favoriteColor = favoriteColor;
+  console.log(updateFields)
 
   try {
     //see if the requesting user is an admin. This seems a bit hacky but it works for now
@@ -214,7 +215,8 @@ router.put("/:id", auth, async (req, res) => {
       "-privilege5",
       "-favoriteColor",
     ]);
-    let isAdmin = !!requestingUser.admin; // turn string into bool
+    let isAdmin = requestingUser.userType==="admin"; // turn string into bool
+    
     if (!isAdmin) {
       return res
         .status(400)

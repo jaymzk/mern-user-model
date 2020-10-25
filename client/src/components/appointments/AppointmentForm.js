@@ -23,7 +23,7 @@ const AppointmentForm = () => {
 
   const { user } = authContext
 
-  const {userType, calendarPreference, privilege1, privilege2, privilege3, privilege4, privilege5} = user
+  const {userType, privilege1, privilege2, privilege3, privilege4, privilege5} = user
 
   useEffect(() => {
     if (current !== null) {
@@ -55,9 +55,9 @@ const AppointmentForm = () => {
 
   let { date, reference, startTime, endTime, room, notes, available} = appointment;
 
-  const [startTimeClicked, setStartTimeClicked] = useState(false)
-  const [endTimeClicked, setEndTimeClicked] = useState(false)
-  const [dateClicked, setDateClicked] = useState(false)
+  let [startTimeClicked, setStartTimeClicked] = useState(false)
+  let [endTimeClicked, setEndTimeClicked] = useState(false)
+  let [dateClicked, setDateClicked] = useState(false)
 
 
 
@@ -116,7 +116,6 @@ const AppointmentForm = () => {
     const minutes = time.getMinutes()
 
     time = new Date(0,0,0, hours, minutes, 0,0)
-
 
     setAppointment({...appointment, endTime:time})
   }
